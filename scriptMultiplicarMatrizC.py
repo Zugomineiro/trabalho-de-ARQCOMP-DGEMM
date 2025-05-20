@@ -84,7 +84,7 @@ def pegarTempoExecucao():
 
 def main():
     tamanhoInicial = 1000
-    tamanhoFinal = 8000
+    tamanhoFinal = 5000
     espacamento = 1000
     iteracoes = 10
     arquivoExe = "cap2.exe"
@@ -101,7 +101,7 @@ def main():
         tipoO = oAtual
         tipoSimulacaoAtual = tipoSimulacao + "_O" + str(tipoO) + "_"
 
-        # tamanhosAtual = tamanhos
+        tamanhosAtual = tamanhos
         # if oAtual == 3:
         #     tamanhosAtual = tamanhos[5:] # Os tamanhos anteriores ja foram processados
         
