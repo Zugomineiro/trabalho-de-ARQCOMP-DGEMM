@@ -1,0 +1,2 @@
+Tempo: 629.515070400
+tamanho da matriz: 5000 X 5000

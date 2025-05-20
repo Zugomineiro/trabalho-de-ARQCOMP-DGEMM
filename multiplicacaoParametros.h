@@ -1,0 +1,2 @@
+#define dimensaoMatriz 6000
+#define tamanhoMatriz dimensaoMatriz*dimensaoMatriz
