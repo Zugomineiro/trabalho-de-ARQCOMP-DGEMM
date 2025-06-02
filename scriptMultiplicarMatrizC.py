@@ -52,9 +52,10 @@ def pegarDataEHoraAtual():
 def salvarInformacoes(tamanhoMatriz,listaTempos,tipoExecucao = "python"):
     ano,mes,dia,hora,minuto,segundo = pegarDataEHoraAtual()
     nomeArquivo = f"tempos_{tipoExecucao}_{tamanhoMatriz}.txt"
+    diretorio = "tempos\\"
     tempoTotal = 0 # para calcular a media
 
-    with open(nomeArquivo,'w') as arquivo:
+    with open(diretorio + nomeArquivo,'w') as arquivo:
         arquivo.write(f"data: {dia}/{mes}/{ano} {hora}:{minuto}:{segundo} \n")
         arquivo.write(f"tamanho da matriz: {tamanhoMatriz}X{tamanhoMatriz} , tempo em segundos para multiplicacao ({tipoExecucao}) em segundos: \n")
         for i in range(len(listaTempos)):
@@ -71,7 +72,11 @@ def configurarTamanhoC(tamanho,nomeArquivoC,nomeArquivoEXE,tipoO=0):
         arquivo.write(f"#define dimensaoMatriz {tamanho}\n")
         arquivo.write("#define tamanhoMatriz dimensaoMatriz*dimensaoMatriz")
     # Compila o arquivo
-    comando = "gcc -O" + str(tipoO) + " " + nomeArquivoC + " -o " + nomeArquivoEXE
+    argumentoExtra = ""
+    if nomeArquivoEXE == "cap3.exe":
+        argumentoExtra = "-mavx512f" # Para rodar vetores de 512 bytes no processador (nem todos os processadores podem lidar com essa operação)
+
+    comando = "gcc -O" + str(tipoO) + " " + argumentoExtra + " " + nomeArquivoC + " -o " + nomeArquivoEXE
     subprocess.run(comando,shell=True)
 
 """
@@ -84,12 +89,12 @@ def pegarTempoExecucao():
 
 def main():
     tamanhoInicial = 1000
-    tamanhoFinal = 5000
+    tamanhoFinal = 8000
     espacamento = 1000
     iteracoes = 10
-    arquivoExe = "cap2.exe"
-    arquivoC = "multiplicacaoMatrizesCap2.c"
-    tipoSimulacao = "Cap2"
+    arquivoExe = "cap3.exe"
+    arquivoC = "multiplicacaoMatrizesCap3.c"
+    tipoSimulacao = "Cap3"
     tiposO = [0,1,2,3]
 
     tamanhos = []
@@ -111,6 +116,7 @@ def main():
             for iteracao in range(iteracoes):
                 subprocess.run(".\\" + arquivoExe)
 
+                tempoAtualExecucao = pegarTempoExecucao()
                 listaTempos += [pegarTempoExecucao()]
 
                 
