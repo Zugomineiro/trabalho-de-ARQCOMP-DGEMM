@@ -1,2 +1,2 @@
-Tempo: 1.325866500
-tamanho da matriz: 2000 X 2000
+Tempo: 14.474552900
+tamanho da matriz: 7000 X 7000

@@ -67,13 +67,15 @@ def salvarInformacoes(tamanhoMatriz,listaTempos,tipoExecucao = "python"):
 """
     Escreve o tamanhoAtual no codigo e compila ele
 """
-def configurarTamanhoC(tamanho,nomeArquivoC,nomeArquivoEXE,tipoO=0):
+def configurarTamanhoC(tamanho,nomeArquivoC,nomeArquivoEXE,tipoO=0,UNROLL = 8,BLOCKSIZE=64):
     with open("multiplicacaoParametros.h","w") as arquivo:
         arquivo.write(f"#define dimensaoMatriz {tamanho}\n")
-        arquivo.write("#define tamanhoMatriz dimensaoMatriz*dimensaoMatriz")
+        arquivo.write("#define tamanhoMatriz dimensaoMatriz*dimensaoMatriz\n")
+        arquivo.write(f"#define UNROLL {UNROLL}\n")
+        arquivo.write(f"#define BLOCKSIZE {BLOCKSIZE}\n")
     # Compila o arquivo
     argumentoExtra = ""
-    if nomeArquivoEXE == "cap3.exe":
+    if nomeArquivoEXE in ["cap3.exe","cap4.exe","cap5.exe"]:
         argumentoExtra = "-mavx512f" # Para rodar vetores de 512 bytes no processador (nem todos os processadores podem lidar com essa operação)
 
     comando = "gcc -O" + str(tipoO) + " " + argumentoExtra + " " + nomeArquivoC + " -o " + nomeArquivoEXE
@@ -89,13 +91,15 @@ def pegarTempoExecucao():
 
 def main():
     tamanhoInicial = 1000
-    tamanhoFinal = 8000
+    tamanhoFinal = 7000
     espacamento = 1000
     iteracoes = 10
-    arquivoExe = "cap3.exe"
-    arquivoC = "multiplicacaoMatrizesCap3.c"
-    tipoSimulacao = "Cap3"
+    arquivoExe = "cap5.exe"
+    arquivoC = "multiplicacaoMatrizesCap5.c"
+    tipoSimulacao = "Cap5"
     tiposO = [0,1,2,3]
+    UNROLL = 8 # Parametro para o capitulo 4, afeta o desempenho
+    BLOCKSIZE = 64
 
     tamanhos = []
 
@@ -112,11 +116,10 @@ def main():
         
         for tamanho in tamanhosAtual:
             listaTempos = []
-            configurarTamanhoC(tamanho,arquivoC,arquivoExe,tipoO)
+            configurarTamanhoC(tamanho,arquivoC,arquivoExe,tipoO,UNROLL,BLOCKSIZE)
             for iteracao in range(iteracoes):
                 subprocess.run(".\\" + arquivoExe)
 
-                tempoAtualExecucao = pegarTempoExecucao()
                 listaTempos += [pegarTempoExecucao()]
 
                 
